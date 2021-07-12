@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/photosFragment">
+
+    <fragment
+        android:id="@+id/photosFragment"
+        android:name="com.example.simplephotoapp.ui.PhotosFragment"
+        android:label="fragment_photos_list"
+        tools:layout="@layout/fragment_photos_list" >
+        <action
+            android:id="@+id/action_photosFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_photosFragment_to_favoritePhotosFragment"
+            app:destination="@id/favoritePhotosFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.simplephotoapp.ui.DetailFragment"
+        android:label="fragment_detail_photo"
+        tools:layout="@layout/fragment_detail_photo" >
+        <argument
+            android:name="photo"
+            app:argType="com.example.simplephotoapp.data.domain.PhotoDomain" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritePhotosFragment"
+        android:name="com.example.simplephotoapp.ui.FavoritePhotosFragment"
+        android:label="fragment_favorite_photos"
+        tools:layout="@layout/fragment_favorite_photos" >
+        <action
+            android:id="@+id/action_favoritePhotosFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+</navigation>

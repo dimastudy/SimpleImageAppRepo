@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SimpleImageApp</string>
+    <string name="description_defalt">Just a default description of some photo that you can see above this info card. It can be really big, but now it is just a little description for test</string>
+    <string name="retry">Retry</string>
+    <string name="no_result">No result found for this query</string>
+    <string name="cannot_loaded">Results couldn\'t be loaded</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+</resources>

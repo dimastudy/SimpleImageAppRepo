@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border_for_image"
+        android:elevation="10dp"
+        app:cardCornerRadius="20dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_unsplash_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"/>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@drawable/gradient"
+                app:layout_constraintBottom_toBottomOf="@+id/image_unsplash_photo"
+                app:layout_constraintLeft_toLeftOf="@id/image_unsplash_photo"
+                app:layout_constraintRight_toRightOf="@id/image_unsplash_photo"
+                />
+
+            <TextView
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/tv_creator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                app:drawableStartCompat="@drawable/ic_baseline_person_24"
+                app:layout_constraintBottom_toBottomOf="@+id/image_unsplash_photo"
+                app:layout_constraintEnd_toEndOf="@+id/image_unsplash_photo"
+                app:layout_constraintStart_toStartOf="@+id/image_unsplash_photo"
+                tools:text="Jack Jackson Marcovich" />
+
+            <ProgressBar
+                android:id="@+id/pb_image_load"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/image_unsplash_photo"
+                app:layout_constraintEnd_toEndOf="@+id/image_unsplash_photo"
+                app:layout_constraintStart_toStartOf="@+id/image_unsplash_photo"
+                app:layout_constraintTop_toTopOf="@+id/image_unsplash_photo" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

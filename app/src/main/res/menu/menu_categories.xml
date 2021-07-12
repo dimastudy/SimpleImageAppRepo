@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Categories">
+        <menu>
+    <item android:id="@+id/action_category_cars"
+        android:title="Cars" />
+    <item android:id="@+id/action_category_cats"
+        android:title="Cats" />
+    <item android:id="@+id/action_category_dogs"
+        android:title="Dogs" />
+    <item android:id="@+id/action_category_nature"
+        android:title="Nature" />
+    <item android:id="@+id/action_category_movies"
+        android:title="Movies" />
+        </menu>
+    </item>
+</menu>

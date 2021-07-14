@@ -184,7 +184,7 @@ class DetailPhotoViewModel (
 
     class Factory @AssistedInject constructor(
         @Assisted("photoDomain") val photo: PhotoDomain,
-        val repository: PhotoRepository
+        private val repository: PhotoRepository
     ): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(DetailPhotoViewModel::class.java)){

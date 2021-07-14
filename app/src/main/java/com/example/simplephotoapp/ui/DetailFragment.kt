@@ -2,10 +2,7 @@ package com.example.simplephotoapp.ui
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -34,17 +31,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
     private val binding get() = _binding
     private var isFavorite: Boolean = false
 
-    @Inject
-    lateinit var factory:  Lazy<DetailPhotoViewModel.Factory.Factory>
 
-    private val viewModel: DetailPhotoViewModel by viewModels{
+    @Inject lateinit var factory: DetailPhotoViewModel.Factory.Factory
+
+    private val viewModel: DetailPhotoViewModel by viewModels {
         val photo = DetailFragmentArgs.fromBundle(requireArguments()).photo
-        factory.get().create(photo)
+        factory.create(photo)
     }
-
-
-
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +50,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
                 Glide.with(this@DetailFragment)
                     .load(photo.photoUrl)
                     .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .listener(object: RequestListener<Drawable>{
+                    .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
                             e: GlideException?,
                             model: Any?,
@@ -89,20 +82,19 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
 
         }
 
-
-        viewModel.isFavorite.observe(viewLifecycleOwner){
+        viewModel.isFavorite.observe(viewLifecycleOwner) {
             isFavorite = it == true
             requireActivity().invalidateOptionsMenu()
         }
 
         binding!!.btnDownloadImage.setOnClickListener {
             val imageUrl = viewModel.photoProperty.value?.photoUrl
-            viewModel.downloadImage(imageUrl!!,requireActivity())
+            viewModel.downloadImage(imageUrl!!, requireActivity())
         }
 
-        viewModel.downloadPhoto.observe(viewLifecycleOwner){
-            if(it == true){
-                Snackbar.make(view,"Downloaded!",Snackbar.LENGTH_LONG).show()
+        viewModel.downloadPhoto.observe(viewLifecycleOwner) {
+            if (it == true) {
+                Snackbar.make(view, "Downloaded!", Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -115,24 +107,30 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
-        inflater.inflate(R.menu.menu_detail,menu)
+        inflater.inflate(R.menu.menu_detail, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        return super.onOptionsItemSelected(item)
         val photo = DetailFragmentArgs.fromBundle(requireArguments()).photo
-      return  when(item.itemId){
+        return when (item.itemId) {
             R.id.action_favorite -> {
 
-                if(isFavorite){
+                if (isFavorite) {
                     viewModel.deleteFavoritePhoto(photo)
-                    item.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_border_24)
-                    Snackbar.make(requireView(),"Deleted from Favorites", Snackbar.LENGTH_SHORT).show()
-                }
-                else{
+                    item.icon = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_favorite_border_24
+                    )
+                    Snackbar.make(requireView(), "Deleted from Favorites", Snackbar.LENGTH_SHORT)
+                        .show()
+                } else {
                     viewModel.addPhotoToFavorite(photo)
-                    item.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_24)
-                    Snackbar.make(requireView(),"Added to Favorites", Snackbar.LENGTH_SHORT).show()
+                    item.icon = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_baseline_favorite_24
+                    )
+                    Snackbar.make(requireView(), "Added to Favorites", Snackbar.LENGTH_SHORT).show()
                 }
                 true
             }
@@ -149,10 +147,14 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val item = menu.findItem(R.id.action_favorite)
-        if(isFavorite){
-            item.icon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_24)
+        if (isFavorite) {
+            item.icon =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_favorite_24)
         } else {
-            item.icon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_baseline_favorite_border_24)
+            item.icon = ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.ic_baseline_favorite_border_24
+            )
         }
     }
 

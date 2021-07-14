@@ -39,26 +39,12 @@ class PhotoRepository @Inject constructor(
         }
 
     suspend fun insertPhotoToDatabase(photo: PhotoDomain) {
-        val photoEntity = PhotoEntity(
-            photo.id,
-            photo.photoUrl,
-            photo.creatorNickname,
-            photo.imageDescription,
-            photo.photoLikes,
-            photo.photoUrlDownload
-        )
+        val photoEntity = photo.getDatabasePhoto()
         database.photoDao.insertPhoto(photoEntity)
     }
 
     suspend fun deletePhotoFromDatabase(photo: PhotoDomain){
-        val photoEntity = PhotoEntity(
-            photo.id,
-            photo.photoUrl,
-            photo.creatorNickname,
-            photo.imageDescription,
-            photo.photoLikes,
-            photo.photoUrlDownload
-        )
+        val photoEntity = photo.getDatabasePhoto()
         database.photoDao.deletePhoto(photoEntity)
     }
 

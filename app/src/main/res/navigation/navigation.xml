@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_photos_list" >
         <action
             android:id="@+id/action_photosFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/from_left_top_angle_scale"
+            app:exitAnim="@anim/to_rignt_bottom_angle_scale"
+            app:popEnterAnim="@anim/from_right_bottom_angle_scale"
+            app:popExitAnim="@anim/to_left_top_angle_scale" />
         <action
             android:id="@+id/action_photosFragment_to_favoritePhotosFragment"
             app:destination="@id/favoritePhotosFragment" />

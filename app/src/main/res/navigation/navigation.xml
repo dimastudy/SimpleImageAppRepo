@@ -19,7 +19,11 @@
             app:popExitAnim="@anim/to_left_top_angle_scale" />
         <action
             android:id="@+id/action_photosFragment_to_favoritePhotosFragment"
-            app:destination="@id/favoritePhotosFragment" />
+            app:destination="@id/favoritePhotosFragment"
+            app:enterAnim="@anim/from_right_slide"
+            app:exitAnim="@anim/to_left_slide"
+            app:popEnterAnim="@anim/from_left_slide"
+            app:popExitAnim="@anim/to_right_slide" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -37,6 +41,10 @@
         tools:layout="@layout/fragment_favorite_photos" >
         <action
             android:id="@+id/action_favoritePhotosFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/from_left_top_angle_scale"
+            app:exitAnim="@anim/to_rignt_bottom_angle_scale"
+            app:popEnterAnim="@anim/from_right_bottom_angle_scale"
+            app:popExitAnim="@anim/to_left_top_angle_scale" />
     </fragment>
 </navigation>

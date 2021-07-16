@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/photosFragment">
+    app:startDestination="@id/welcomeScreenFragment">
 
     <fragment
         android:id="@+id/photosFragment"
         android:name="com.example.simplephotoapp.ui.PhotosFragment"
-        android:label="fragment_photos_list"
-        tools:layout="@layout/fragment_photos_list" >
+        android:label="Images"
+        tools:layout="@layout/fragment_photos_list">
         <action
             android:id="@+id/action_photosFragment_to_detailFragment"
             app:destination="@id/detailFragment"
@@ -28,8 +28,8 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.simplephotoapp.ui.DetailFragment"
-        android:label="fragment_detail_photo"
-        tools:layout="@layout/fragment_detail_photo" >
+        android:label="Image Details"
+        tools:layout="@layout/fragment_detail_photo">
         <argument
             android:name="photo"
             app:argType="com.example.simplephotoapp.data.domain.PhotoDomain" />
@@ -37,8 +37,8 @@
     <fragment
         android:id="@+id/favoritePhotosFragment"
         android:name="com.example.simplephotoapp.ui.FavoritePhotosFragment"
-        android:label="fragment_favorite_photos"
-        tools:layout="@layout/fragment_favorite_photos" >
+        android:label="Favorite images"
+        tools:layout="@layout/fragment_favorite_photos">
         <action
             android:id="@+id/action_favoritePhotosFragment_to_detailFragment"
             app:destination="@id/detailFragment"
@@ -46,5 +46,19 @@
             app:exitAnim="@anim/to_rignt_bottom_angle_scale"
             app:popEnterAnim="@anim/from_right_bottom_angle_scale"
             app:popExitAnim="@anim/to_left_top_angle_scale" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcomeScreenFragment"
+        android:name="com.example.simplephotoapp.ui.WelcomeScreenFragment"
+        android:label="fragment_welcome_screen"
+        tools:layout="@layout/fragment_welcome_screen">
+        <action
+            android:id="@+id/action_welcomeScreenFragment_to_photosFragment"
+            app:destination="@id/photosFragment"
+            app:enterAnim="@anim/from_up_slide"
+            app:exitAnim="@anim/to_down_slide"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

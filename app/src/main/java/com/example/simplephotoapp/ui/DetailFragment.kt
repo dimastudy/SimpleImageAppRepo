@@ -99,8 +99,6 @@ class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
             }
         }
 
-
-        (activity as AppCompatActivity).supportActionBar?.title = "Image Details"
         setHasOptionsMenu(true)
 
     }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:theme="@style/Theme.CustomThemeForWelcomeScreen"
+    android:layout_height="match_parent"
+    android:background="@color/welcome_back"
+    tools:context="com.example.simplephotoapp.ui.WelcomeScreenFragment"
+    android:id="@+id/welcome_container">
+
+    <ImageView
+        android:id="@+id/image_welcome_s"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/image_welcome_i"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.965"
+        android:src="@drawable/welcome_simple" />
+
+    <ImageView
+        android:id="@+id/image_welcome_i"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/image_welcome_a"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/welcome_image" />
+
+    <ImageView
+        android:id="@+id/image_welcome_a"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="216dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/welcome_app" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

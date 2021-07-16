@@ -34,7 +34,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        tools:src="@drawable/ic_launcher_background" />
+                        tools:src="@drawable/ic_launcher_foreground" />
 
                     <ProgressBar
                         android:id="@+id/pb_image_loading"
@@ -93,7 +93,7 @@
                         android:padding="8dp"
                         android:textColor="@color/black"
                         app:drawableStartCompat="@drawable/ic_baseline_info_24"
-                        tools:text="@string/description_defalt" />
+                        tools:text="@string/description_default" />
 
                     <TextView
                         android:id="@+id/tv_likes"

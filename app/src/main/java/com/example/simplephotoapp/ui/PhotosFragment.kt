@@ -118,11 +118,13 @@ class PhotosFragment : Fragment(R.layout.fragment_photos_list) {
             true
         }
 
-
-
-        (activity as AppCompatActivity).supportActionBar?.title = "Images"
         setHasOptionsMenu(true)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as AppCompatActivity).supportActionBar?.show()
     }
 
 

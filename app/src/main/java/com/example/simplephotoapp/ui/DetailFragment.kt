@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
+class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
 
 
     private var _binding: FragmentDetailPhotoBinding? = null
@@ -32,13 +32,15 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
     private var isFavorite: Boolean = false
 
 
-    @Inject lateinit var factory: DetailPhotoViewModel.Factory.Factory
+//    @Inject
+//    private lateinit var factory: DetailPhotoViewModel.Factory.Factory
+
+    @Inject lateinit var viewModelFactory: DetailPhotoViewModel.AssistedFactory
 
     private val viewModel: DetailPhotoViewModel by viewModels {
         val photo = DetailFragmentArgs.fromBundle(requireArguments()).photo
-        factory.create(photo)
+        DetailPhotoViewModel.provideFactory(viewModelFactory,photo)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,7 +81,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
                 tvDescription.text = photo.imageDescription
                 tvLikes.text = "${photo.photoLikes} likes"
             }
-
         }
 
         viewModel.isFavorite.observe(viewLifecycleOwner) {
@@ -98,8 +99,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail_photo) {
             }
         }
 
-
-        (activity as AppCompatActivity).supportActionBar?.title = "Image Details"
         setHasOptionsMenu(true)
 
     }

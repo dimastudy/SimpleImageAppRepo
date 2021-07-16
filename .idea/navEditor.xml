@@ -35,8 +35,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="315" />
-                            <option name="y" value="-169" />
+                            <option name="x" value="156" />
+                            <option name="y" value="-59" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -47,9 +47,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="86" />
-                            <option name="y" value="212" />
+                            <option name="x" value="-125" />
+                            <option name="y" value="334" />
                           </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_favoritePhotosFragment_to_detailFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -59,8 +68,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="-176" />
-                            <option name="y" value="-133" />
+                            <option name="x" value="-413" />
+                            <option name="y" value="-144" />
                           </Point>
                         </option>
                         <option name="myPositions">
@@ -70,7 +79,24 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_photosFragment_to_favoritePhotosFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="welcomeScreenFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-736" />
+                            <option name="y" value="90" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

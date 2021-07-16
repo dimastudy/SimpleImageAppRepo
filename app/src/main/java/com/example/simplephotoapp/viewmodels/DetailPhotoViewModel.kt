@@ -41,9 +41,9 @@ import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 
-class DetailPhotoViewModel (
+class DetailPhotoViewModel @AssistedInject constructor(
     private val repository: PhotoRepository,
-    private val photo: PhotoDomain
+    @Assisted private val photo: PhotoDomain
 ) : ViewModel() {
 
 
@@ -64,7 +64,6 @@ class DetailPhotoViewModel (
         _photo.value = photo
         isFavoriteInit()
     }
-
 
 
     fun addPhotoToFavorite(photo: PhotoDomain) {
@@ -182,22 +181,39 @@ class DetailPhotoViewModel (
         }
     }
 
-    class Factory @AssistedInject constructor(
-        @Assisted("photoDomain") val photo: PhotoDomain,
-        private val repository: PhotoRepository
-    ): ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(DetailPhotoViewModel::class.java)){
-                return DetailPhotoViewModel(repository, photo) as T
+//    class Factory @AssistedInject constructor(
+//        @Assisted private val photo: PhotoDomain,
+//        private val repository: PhotoRepository
+//    ) : ViewModelProvider.Factory {
+//
+//        @Suppress("UNCHECKED_CAST")
+//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//            require(modelClass == DetailPhotoViewModel::class)
+//            return DetailPhotoViewModel(repository, photo) as T
+//        }
+
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: AssistedFactory,
+            photo: PhotoDomain
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(photo) as T
             }
-            throw IllegalArgumentException("Unknown viewModel class")
-        }
 
-        @AssistedFactory
-        interface Factory {
-            fun create(@Assisted("photoDomain") photo: PhotoDomain) : DetailPhotoViewModel.Factory
         }
-
     }
+
+    @dagger.assisted.AssistedFactory
+    interface AssistedFactory {
+        fun create(photo: PhotoDomain): DetailPhotoViewModel
+    }
+
+
+//    @AssistedFactory
+//    interface Factory {
+//        fun create(@Assisted photo: PhotoDomain): DetailPhotoViewModel
+//    }
 
 }

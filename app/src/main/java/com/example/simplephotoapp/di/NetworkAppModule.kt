@@ -1,6 +1,8 @@
 package com.example.simplephotoapp.di
 
 import android.content.Context
+import com.example.simplephotoapp.PhotoApplication
+import com.example.simplephotoapp.data.PhotoRepository
 import com.example.simplephotoapp.database.PhotoDatabase
 import com.example.simplephotoapp.database.getDatabase
 import com.example.simplephotoapp.network.UnsplashApiService
@@ -36,6 +38,12 @@ object NetworkAppModule {
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): PhotoDatabase =
-        getDatabase(context)
+    fun provideAppDatabase(photoApplication: PhotoApplication): PhotoDatabase =
+        getDatabase(photoApplication)
+
+
+    @Singleton
+    @Provides
+    fun providePhotoApplication(@ApplicationContext app: Context): PhotoApplication =
+        app as PhotoApplication
 }

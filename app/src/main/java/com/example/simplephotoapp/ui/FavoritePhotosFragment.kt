@@ -48,7 +48,6 @@ class FavoritePhotosFragment : Fragment(R.layout.fragment_favorite_photos) {
         }
 
 
-        (activity as AppCompatActivity).supportActionBar?.title = "Favorite images"
 
 
     }

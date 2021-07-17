@@ -1,5 +1,10 @@
 package com.example.simplephotoapp.ui
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
@@ -30,16 +35,17 @@ class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
     private var _binding: FragmentDetailPhotoBinding? = null
     private val binding get() = _binding
     private var isFavorite: Boolean = false
-
+    private var downloadId: Long = 0L
 
 //    @Inject
 //    private lateinit var factory: DetailPhotoViewModel.Factory.Factory
 
-    @Inject lateinit var viewModelFactory: DetailPhotoViewModel.AssistedFactory
+    @Inject
+    lateinit var viewModelFactory: DetailPhotoViewModel.AssistedFactory
 
     private val viewModel: DetailPhotoViewModel by viewModels {
         val photo = DetailFragmentArgs.fromBundle(requireArguments()).photo
-        DetailPhotoViewModel.provideFactory(viewModelFactory,photo)
+        DetailPhotoViewModel.provideFactory(viewModelFactory, photo)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,7 +88,10 @@ class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
                 tvLikes.text = "${photo.photoLikes} likes"
             }
         }
-
+        activity?.registerReceiver(
+            onDownloadComplete,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        )
         viewModel.isFavorite.observe(viewLifecycleOwner) {
             isFavorite = it == true
             requireActivity().invalidateOptionsMenu()
@@ -90,7 +99,15 @@ class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
 
         binding!!.btnDownloadImage.setOnClickListener {
             val imageUrl = viewModel.photoProperty.value?.photoUrl
-            viewModel.downloadImage(imageUrl!!, requireActivity())
+//            viewModel.downloadImage(imageUrl!!, requireActivity())
+            viewModel.beginDownload(imageUrl!!, requireActivity())
+
+        }
+
+        viewModel.downloadId.observe(viewLifecycleOwner) { id ->
+            if (id != null) {
+                downloadId = id
+            }
         }
 
         viewModel.downloadPhoto.observe(viewLifecycleOwner) {
@@ -102,6 +119,17 @@ class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
         setHasOptionsMenu(true)
 
     }
+
+    private val onDownloadComplete = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val id = p1?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if (downloadId == id) {
+                Snackbar.make(requireView(), "Download Complete", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -140,6 +168,7 @@ class DetailFragment() : Fragment(R.layout.fragment_detail_photo) {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        activity?.unregisterReceiver(onDownloadComplete)
     }
 
 

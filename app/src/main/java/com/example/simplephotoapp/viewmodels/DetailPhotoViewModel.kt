@@ -2,14 +2,14 @@ package com.example.simplephotoapp.viewmodels
 
 import android.Manifest
 import android.app.Activity
-import android.app.Application
-import android.content.ContentResolver
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.ContentValues
 import android.content.Context
+import android.content.Context.DOWNLOAD_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -18,28 +18,18 @@ import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.simplephotoapp.R
 import com.example.simplephotoapp.data.PhotoRepository
 import com.example.simplephotoapp.data.domain.PhotoDomain
-import com.example.simplephotoapp.data.models.Photo
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
-import java.lang.Exception
-import java.lang.IllegalArgumentException
-import javax.inject.Inject
-
 
 class DetailPhotoViewModel @AssistedInject constructor(
     private val repository: PhotoRepository,
@@ -59,9 +49,14 @@ class DetailPhotoViewModel @AssistedInject constructor(
     val downloadPhoto: LiveData<Boolean>
         get() = _downloadPhoto
 
+    private val _downloadId = MutableLiveData<Long?>()
+    val downloadId: LiveData<Long?>
+        get() = _downloadId
+
     init {
         _downloadPhoto.value = false
         _photo.value = photo
+        _downloadId.value = null
         isFavoriteInit()
     }
 
@@ -90,57 +85,6 @@ class DetailPhotoViewModel @AssistedInject constructor(
         }
     }
 
-
-    fun saveMediaToStorage(bitmap: Bitmap, activity: Activity) {
-        //Generating a file name
-        val filename = "${System.currentTimeMillis()}.jpg"
-
-        //Output stream
-        var fos: OutputStream? = null
-
-        //For devices running android >= Q
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            //getting the contentResolver
-            activity.contentResolver?.also { resolver ->
-
-                //Content resolver will process the contentvalues
-                val contentValues = ContentValues().apply {
-
-                    //putting file information in content values
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-                }
-
-                //Inserting the contentValues to contentResolver and getting the Uri
-                val imageUri: Uri? =
-                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-                //Opening an outputstream with the Uri that we got
-                fos = imageUri?.let { resolver.openOutputStream(it) }
-            }
-        } else {
-            //These for devices running on android < Q
-            //So I don't think an explanation is needed here
-            val imagesDir =
-//                activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            val image = File(imagesDir, filename)
-            fos = FileOutputStream(image)
-        }
-
-        fos?.use {
-            //Finally writing the bitmap to the output stream that we opened
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            GlobalScope.launch {
-                withContext(Dispatchers.Main) {
-                    _downloadPhoto.value = false
-                }
-            }
-        }
-    }
-
-
     private fun verifyPermission(activity: Activity): Boolean {
 
         val permissionExternalMemory: Int =
@@ -156,41 +100,35 @@ class DetailPhotoViewModel @AssistedInject constructor(
     }
 
 
-    fun downloadImage(imageUrl: String, activity: Activity) {
-        GlobalScope.launch(Dispatchers.IO) {
-            if (!verifyPermission(activity)) {
-                return@launch
-            }
-            withContext(Dispatchers.Main) {
-                _downloadPhoto.value = true
-            }
+    fun beginDownload(imageUrl: String, activity: Activity) {
+        val filename = "${System.currentTimeMillis()}.jpg"
+//        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filename)
 
-            Glide.with(activity)
-                .asBitmap()
-                .load(imageUrl)
-                .into(object : SimpleTarget<Bitmap>(1920, 1080) {
-                    override fun onResourceReady(
-                        resource: Bitmap,
-                        transition: Transition<in Bitmap>?
-                    ) {
-                        val bitmap: Bitmap = resource
-                        saveMediaToStorage(bitmap, activity)
-                    }
-                })
+        var request: DownloadManager.Request? = null
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            request = DownloadManager.Request(Uri.parse(imageUrl))
+                .setTitle("Image")
+                .setDescription("Downloading")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, filename)
+//                .setDestinationUri(Uri.fromFile(file))
+                .setRequiresCharging(false)
+                .setAllowedOverMetered(true)
+                .setAllowedOverRoaming(true)
 
+        } else {
+            request = DownloadManager.Request(Uri.parse(imageUrl))
+                .setTitle("Image")
+                .setDescription("Downloading")
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, filename)
+                .setAllowedOverRoaming(true)
         }
-    }
 
-//    class Factory @AssistedInject constructor(
-//        @Assisted private val photo: PhotoDomain,
-//        private val repository: PhotoRepository
-//    ) : ViewModelProvider.Factory {
-//
-//        @Suppress("UNCHECKED_CAST")
-//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-//            require(modelClass == DetailPhotoViewModel::class)
-//            return DetailPhotoViewModel(repository, photo) as T
-//        }
+        val downloadManager = activity.getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        _downloadId.value = downloadManager.enqueue(request)
+
+    }
 
 
     companion object {
@@ -210,10 +148,5 @@ class DetailPhotoViewModel @AssistedInject constructor(
         fun create(photo: PhotoDomain): DetailPhotoViewModel
     }
 
-
-//    @AssistedFactory
-//    interface Factory {
-//        fun create(@Assisted photo: PhotoDomain): DetailPhotoViewModel
-//    }
 
 }

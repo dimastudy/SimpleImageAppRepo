@@ -21,9 +21,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkAppModule {
+    
     @Singleton
     @Provides
-    fun provideApi() : UnsplashApiService {
+    fun provideApi(): UnsplashApiService {
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
